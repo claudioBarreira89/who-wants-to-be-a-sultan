@@ -13,10 +13,10 @@ export default async function handler(
   res: NextApiResponse<Data>
 ) {
   const image = await openai.images.generate({
-    model: "dall-e-3",
-    prompt: "a white siamese cat",
+    model: "dall-e-2",
+    prompt: "sultan of swing honeypot",
     n: 1,
-    size: "1024x1024",
+    size: "512x512",
   });
   const imageUrl = image.data[0].url || "";
   console.log(`Image URL is ${imageUrl}`);
