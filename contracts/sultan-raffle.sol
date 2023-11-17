@@ -10,8 +10,9 @@ contract SultanRaffle {
     address public charityAddress;
     address public adminAddress;
 
-    bool public poolInitialized = false;
-    uint256 public betAmount = 1;
+    bool public poolInitialized;
+    uint256 public poolCap;
+    uint256 public betAmount;
     address[] public players;
 
     constructor(
@@ -23,9 +24,9 @@ contract SultanRaffle {
         token = IERC20(_tokenAddress);
         charityAddress = _charityAddress;
         adminAddress = _adminAddress;
-        betAmount = 1 * (10 ** 18);
-
-        poolInitialized = true;
+        betAmount = 0.1 * (10 ** 18);
+        poolCap = 1 * (10 ** 18);
+        poolInitialized = false;
     }
 
     modifier isPoolOpen() {
@@ -47,6 +48,15 @@ contract SultanRaffle {
         players.push(msg.sender);
     }
 
+    function checkIfPoolIsFull() public isPoolOpen {
+        uint256 poolBalance = token.balanceOf(address(this));
+
+        if (poolBalance >= poolCap) {
+            checkForRandomWinner();
+            resetPool();
+        }
+    }
+
     function getRandomWinner() private view returns (address) {
         require(players.length > 0, "No players in the pool.");
 
@@ -56,7 +66,7 @@ contract SultanRaffle {
         return players[random % players.length];
     }
 
-    function checkForRandomWinner() public isPoolOpen {
+    function checkForRandomWinner() private {
         address winner = getRandomWinner();
         uint256 poolBalance = token.balanceOf(address(this));
         uint256 winnerShare = (poolBalance * 95) / 100;
@@ -75,12 +85,10 @@ contract SultanRaffle {
             token.transfer(adminAddress, adminShare),
             "Failed to send tokens to admin"
         );
-
-        poolInitialized = false;
     }
 
     function resetPool() public {
-        require(!poolInitialized, "Pool must be closed to reset.");
+        poolInitialized = false;
         delete players;
     }
 
