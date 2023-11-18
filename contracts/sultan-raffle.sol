@@ -22,6 +22,8 @@ contract SultanRaffle is VRFConsumerBaseV2, ConfirmedOwner {
     uint256 public poolCap;
     uint256 public betAmount;
     address[] public players;
+    string public name;
+    string public description;
 
     address public charityAddress;
 
@@ -159,5 +161,9 @@ contract SultanRaffle is VRFConsumerBaseV2, ConfirmedOwner {
 
     receive() external payable {
         betOnPool();
+    }
+
+    function getRaffleMetadata() public view returns (string memory, string memory) {
+        return (name, description);
     }
 }
