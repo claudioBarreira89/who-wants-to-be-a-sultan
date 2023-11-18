@@ -19,7 +19,7 @@ const raffleData = [
     title: "Average winnings",
     showcase: "280,000",
   },
-]
+];
 
 const RaffleContent = () => {
   const [number, setNumber] = useState(0);
@@ -30,13 +30,13 @@ const RaffleContent = () => {
   const handleDecrease = () => {
     const newNumber = number - 1;
     if (newNumber < min || newNumber > max) return;
-    setNumber(prevNumber => prevNumber - 1);
+    setNumber((prevNumber) => prevNumber - 1);
   };
 
   const handleIncrease = () => {
     const newNumber = number + 1;
     if (newNumber < min || newNumber > max) return;
-    setNumber(prevNumber => prevNumber + 1);
+    setNumber((prevNumber) => prevNumber + 1);
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -48,18 +48,20 @@ const RaffleContent = () => {
   };
 
   const progressBarStyle = {
-    '--progress': `${progress}%`,
+    "--progress": `${progress}%`,
   } as React.CSSProperties;
-
 
   const onRaffleJoin = () => {
     console.log("you joined the raffle");
-  }
+  };
 
   return (
     <>
       <div className="flex justify-center items-center flex-col gap-4 rounded-3xl p-8 bg-cardBg">
-        <div className="relative rounded-full p-8 w-[300px] h-[300px] flex flex-col justify-center progress-bar" style={progressBarStyle}>
+        <div
+          className="relative rounded-full p-8 w-[300px] h-[300px] flex flex-col justify-center progress-bar"
+          style={progressBarStyle}
+        >
           <div className="relative z-10 flex justify-center">
             <Image
               src="/gold_chest.svg"
@@ -81,7 +83,9 @@ const RaffleContent = () => {
                 className="disabled:bg-gray-100"
                 onClick={handleDecrease}
                 disabled={number <= min}
-              >-</Button>
+              >
+                -
+              </Button>
               <Input
                 min={min}
                 max={max}
@@ -93,23 +97,37 @@ const RaffleContent = () => {
                 onClick={handleIncrease}
                 disabled={number >= max}
                 className="disabled:bg-gray-100"
-              >+</Button>
+              >
+                +
+              </Button>
             </div>
 
-
             <div className="w-full">
-              <Button className="w-full mb-2" onClick={onRaffleJoin}>Buy raffle tickets</Button>
-              <p className="text-xs p-0 max-w-[518px]">Thank You for you generosity. By purchasing this ticket you are directly supporting UNICEF's fight on climate change.</p>
-              <p className="text-xs p-0 max-w-[518px]">1 ticket to the raffle costs ~$6. You may purchase up to 3 tickets.</p>
+              <Button className="w-full mb-2" onClick={onRaffleJoin}>
+                Buy raffle tickets
+              </Button>
+              <p className="text-xs p-0 max-w-[518px]">
+                Thank You for you generosity. By purchasing this ticket you are
+                directly supporting UNICEF&apos;s fight on climate change.
+              </p>
+              <p className="text-xs p-0 max-w-[518px]">
+                1 ticket to the raffle costs ~$6. You may purchase up to 3
+                tickets.
+              </p>
             </div>
           </div>
         </div>
-
       </div>
       <div className="px-8 mb-8">
         <div className="flex items-center p-8 rounded-3xl bg-cardBg w-full mt-8">
           {raffleData.map((raffle, index) => (
-            <div className={`pl-8 ${index == raffleData.length - 1 || "border-0 border-r border-white pr-8"}`}>
+            <div
+              key={index}
+              className={`pl-8 ${
+                index == raffleData.length - 1 ||
+                "border-0 border-r border-white pr-8"
+              }`}
+            >
               <p className="text-sm text-slate-300">{raffle.title}</p>
               <p className="text-2xl">{raffle.showcase}</p>
             </div>
@@ -117,7 +135,7 @@ const RaffleContent = () => {
         </div>
       </div>
     </>
-  )
-}
+  );
+};
 
-export default RaffleContent
+export default RaffleContent;

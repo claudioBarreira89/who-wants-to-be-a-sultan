@@ -34,12 +34,15 @@ contract SultanRaffle is VRFConsumerBaseV2, ConfirmedOwner {
 
     bytes32 keyHash =
         0x474e34a077df58807dbe9c96d3c009b23b3c6d0cce433e59bbf5b34f823bc56c;
-    uint32 callbackGasLimit = 100000;
+    uint32 callbackGasLimit = 2500000;
     uint16 requestConfirmations = 3;
     uint32 numWords = 1;
 
     uint256[] public requestIds;
     uint256 public lastRequestId;
+
+    uint256 public rafflesCounter;
+    uint256[] public totalRaffledAmount;
 
     constructor(
         uint64 _subscriptionId
@@ -65,7 +68,7 @@ contract SultanRaffle is VRFConsumerBaseV2, ConfirmedOwner {
     function initializePool(
         address _tokenAddress,
         address _charityAddress,
-        string memory _name, 
+        string memory _name,
         string memory _description
     ) public {
         require(!poolInitialized, "Pool is already open.");
@@ -103,8 +106,10 @@ contract SultanRaffle is VRFConsumerBaseV2, ConfirmedOwner {
     function transferFundsToWinner(address winner) private {
         uint256 poolBalance = token.balanceOf(address(this));
         uint256 winnerShare = (poolBalance * 95) / 100;
-        uint256 charityShare = (poolBalance * 4) / 100;
-        uint256 adminShare = poolBalance - winnerShare - charityShare;
+        uint256 charityShare = (poolBalance * 5) / 100;
+
+        rafflesCounter += 1;
+        totalRaffledAmount.push(winnerShare);
 
         require(
             token.transfer(winner, winnerShare),
@@ -113,10 +118,6 @@ contract SultanRaffle is VRFConsumerBaseV2, ConfirmedOwner {
         require(
             token.transfer(charityAddress, charityShare),
             "Failed to send tokens to charity"
-        );
-        require(
-            token.transfer(admin, adminShare),
-            "Failed to send tokens to admin"
         );
     }
 
@@ -164,7 +165,11 @@ contract SultanRaffle is VRFConsumerBaseV2, ConfirmedOwner {
         betOnPool();
     }
 
-    function getRaffleMetadata() public view returns (string memory, string memory) {
+    function getRaffleMetadata()
+        public
+        view
+        returns (string memory, string memory)
+    {
         return (name, description);
     }
 }
