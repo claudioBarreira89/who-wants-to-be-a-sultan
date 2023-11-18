@@ -16,7 +16,7 @@ export default async function handler(
 ) {
   try {
     const { name, description, charityAddress, tokenAddress } = req.body;
-    console.log(req.body);
+
     const raffleContract = new Contract(
       process.env.NEXT_PUBLIC_SULTAN_RAFFLE_CONTRACT_ADDRESS!,
       sultanRaffleAbi,

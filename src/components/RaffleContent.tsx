@@ -1,6 +1,6 @@
 import { Button } from "antd";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import NoActiveRaffleForm from "./NoActiveRaffleForm";
 import { Contract, utils } from "ethers";
 import sultanRaffleAbi from "../abi/sultan-raffle.json";
@@ -8,25 +8,6 @@ import { getTokenAllowance, provider } from "@/utils/transactions";
 import { erc20ABI, useAccount, useContractWrite } from "wagmi";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { readContract, waitForTransaction, writeContract } from "wagmi/actions";
-
-const raffleData = [
-  {
-    title: "Total Winnings",
-    showcase: "800,000",
-  },
-  {
-    title: "Sultans made",
-    showcase: "8",
-  },
-  {
-    title: "Trees Planted",
-    showcase: "8,000",
-  },
-  {
-    title: "Average winnings",
-    showcase: "280,000",
-  },
-];
 
 const poolSize = 1 * 10 ** 18;
 
@@ -51,6 +32,13 @@ const RaffleContent = () => {
         abi: sultanRaffleAbi,
       });
 
+      const metadata: any = await readContract({
+        address: process.env
+          .NEXT_PUBLIC_SULTAN_RAFFLE_CONTRACT_ADDRESS! as `0x${string}`,
+        functionName: "getRaffleMetadata",
+        abi: sultanRaffleAbi,
+      });
+
       const balance = await tokenContract.balanceOf(
         process.env.NEXT_PUBLIC_SULTAN_RAFFLE_CONTRACT_ADDRESS!
       );
@@ -59,6 +47,14 @@ const RaffleContent = () => {
       const tokenSymbol = await tokenContract.symbol();
 
       return {
+        name: metadata[0],
+        description: metadata[1],
+        players: parseInt(metadata[2]),
+        raffleWinnings: metadata[3].reduce(
+          (acc: any, v: any) => acc + parseInt(v),
+          0
+        ),
+        raffleCounter: metadata[4],
         isPoolInitialized,
         balance: +balance,
         poolAmount,
@@ -66,6 +62,32 @@ const RaffleContent = () => {
       };
     },
   });
+
+  const winnings = data?.raffleWinnings ? data?.raffleWinnings / 10 ** 18 : 0;
+
+  const raffleData = useMemo(
+    () => [
+      {
+        title: "Total Winnings",
+        showcase: `${winnings} ${data?.tokenSymbol}`,
+      },
+      {
+        title: "Sultans made",
+        showcase: data?.raffleCounter.toString(),
+      },
+      {
+        title: "Trees Planted",
+        showcase: Math.ceil(winnings / 0.21),
+      },
+      {
+        title: "Average winnings",
+        showcase: `${winnings / (parseInt(data?.raffleCounter) || 1)} ${
+          data?.tokenSymbol
+        }`,
+      },
+    ],
+    [data?.raffleCounter, data?.tokenSymbol, winnings]
+  );
 
   const { mutate: handleBet, isLoading: isBetting } = useMutation({
     mutationFn: async () => {
@@ -122,14 +144,15 @@ const RaffleContent = () => {
   if (!data?.isPoolInitialized) {
     return (
       <div className="flex justify-center items-center flex-col gap-4 rounded-3xl mt-8 p-8 bg-cardBg w-[550px]">
-        <NoActiveRaffleForm />
+        <NoActiveRaffleForm refetchRaffleInfo={refetchRaffleInfo} />
       </div>
     );
   }
 
   return (
     <>
-      <div className="flex justify-center items-center flex-col gap-4 rounded-3xl p-8 bg-cardBg max-w-[550px]">
+      <div className="flex justify-center items-center flex-col gap-4 rounded-3xl p-8 bg-cardBg max-w-[550px] w-full">
+        <div className="text-xl">{data?.name}</div>
         <div
           className="relative rounded-full p-8 w-[300px] h-[300px] flex flex-col justify-center progress-bar"
           style={progressBarStyle}
@@ -150,8 +173,8 @@ const RaffleContent = () => {
           </div>
         </div>
 
-        <div>
-          <div className="flex flex-col justify-center gap-4 mt-4">
+        <div className="w-full">
+          <div className="flex flex-col w-full justify-center gap-4 mt-4">
             <div className="w-full">
               <Button
                 className="w-full mb-2"
@@ -161,8 +184,7 @@ const RaffleContent = () => {
                 Join raffle
               </Button>
               <p className="text-xs p-1 text-center max-w-[518px] leading-4">
-                Thank You for you generosity. By purchasing this ticket you are
-                directly supporting UNICEF&apos;s fight on climate change.
+                {data?.description}
               </p>
             </div>
           </div>
