@@ -74,6 +74,10 @@ const RaffleContent = () => {
         showcase: `${winnings} ${data?.tokenSymbol}`,
       },
       {
+        title: "Num. of bets",
+        showcase: data?.players,
+      },
+      {
         title: "Sultans made",
         showcase: data?.raffleCounter.toString(),
       },
@@ -83,11 +87,12 @@ const RaffleContent = () => {
       },
       {
         title: "Average winnings",
-        showcase: `${winnings / (parseInt(data?.raffleCounter) || 1)} ${data?.tokenSymbol
-          }`,
+        showcase: `${winnings / (parseInt(data?.raffleCounter) || 1)} ${
+          data?.tokenSymbol
+        }`,
       },
     ],
-    [data?.raffleCounter, data?.tokenSymbol, winnings]
+    [data?.players, data?.raffleCounter, data?.tokenSymbol, winnings]
   );
 
   const { mutate: handleBet, isLoading: isBetting } = useMutation({
@@ -167,6 +172,7 @@ const RaffleContent = () => {
     <div className="flex flex-wrap gap-4">
       <div className="flex-[4]">
         <div className="flex justify-center items-center flex-col gap-4 rounded-3xl p-8 bg-cardBg w-full">
+          <div className="text-xl">{data?.name}</div>
           <div
             className="relative rounded-full p-8 w-[300px] h-[300px] flex flex-col justify-center progress-bar"
             style={progressBarStyle}
@@ -186,8 +192,7 @@ const RaffleContent = () => {
               </p>
             </div>
           </div>
-
-          <div>
+          <div className="w-full">
             <div className="flex flex-col justify-center gap-4 mt-4">
               <div className="w-full">
                 <Button
@@ -202,8 +207,7 @@ const RaffleContent = () => {
                   Join raffle
                 </Button>
                 <p className="text-xs p-1 text-center max-w-[518px] leading-4">
-                  Thank You for you generosity. By purchasing this ticket you are
-                  directly supporting UNICEF&apos;s fight on climate change.
+                  {data?.description}
                 </p>
               </div>
             </div>
@@ -212,27 +216,27 @@ const RaffleContent = () => {
       </div>
 
       <div className="flex-[2] pr-[10px]">
-        <div className="flex items-start p-8 rounded-3xl bg-cardBg w-full h-[476px] overflow-auto">
+        <div className="flex items-start p-8 rounded-3xl bg-cardBg w-full min-h-full overflow-auto">
           <RaffleMessages />
         </div>
       </div>
 
       <div className="mb-8 w-full">
-        <div className="flex items-center justify-center p-8 rounded-3xl bg-cardBg w-full">
+        <div className="flex items-center justify-between p-8 rounded-3xl bg-cardBg w-full">
           {raffleData.map((raffle, index) => (
-            <div
-              key={index}
-              className={`pl-8 ${index == raffleData.length - 1 ||
-                "border-0 border-r border-white pr-8"
-                }`}
-            >
-              <p className="text-sm text-slate-300">{raffle.title}</p>
-              <p className="text-2xl">{raffle.showcase}</p>
-            </div>
+            <>
+              <div key={index}>
+                <p className="text-sm text-slate-300">{raffle.title}</p>
+                <p className="text-2xl">{raffle.showcase}</p>
+              </div>
+              {index !== raffleData.length - 1 && (
+                <div className="h-10 w-0.5 bg-white opacity-60" />
+              )}
+            </>
           ))}
         </div>
       </div>
-    </div >
+    </div>
   );
 };
 
