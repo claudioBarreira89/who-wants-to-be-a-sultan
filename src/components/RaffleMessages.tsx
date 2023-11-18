@@ -55,7 +55,7 @@ function RaffleMessages() {
   // sendMessage(`The event has been called in a smart contract ${address}`, eventName)
 
   return (
-    <div className='h-full w-full'>
+    <div className='h-full w-full relative'>
       <h2 className="mb-6 text-xl">Last Messages</h2>
       {!isReady ? (
         <div>Loading client...</div>
@@ -64,7 +64,7 @@ function RaffleMessages() {
           {!address || !isSubscribed ? (
             <div>
               {address ? <Button
-                className="mt-3 max-w-[200px]"
+                className="w-full mb-2 bg-primary hover:opacity-90 hover:!bg-primary font-bold"
                 onClick={performSubscribe}
                 type='primary'
                 loading={isSubscribing}
@@ -75,8 +75,8 @@ function RaffleMessages() {
                 "please connect your wallet"}
             </div>
           ) : (
-            <div className="h-full w-full">
-              <div className="flex flex-col space-y-4 relative w-full">
+            <div className="w-full">
+              <div className="flex flex-col space-y-4 w-full">
                 {!messages?.length ? (
                   <p>No messages yet.</p>
                 ) : (
@@ -112,7 +112,7 @@ function RaffleMessages() {
                 <Button
                   onClick={unsubscribe}
                   type="primary"
-                  className="bg-red-500 hover:!bg-red-400"
+                  className="bg-red-500 hover:!bg-red-400 absolute bottom-0 left-0 right-0"
                   disabled={!isReady || !account}
                   loading={isSubscribing}
                 >
