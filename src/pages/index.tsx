@@ -7,9 +7,7 @@ import {
   erc20ABI,
   useAccount,
   useContractWrite,
-  usePrepareContractWrite,
 } from "wagmi";
-import { constants } from "ethers";
 
 import sultanRaffleAbi from "../abi/sultan-raffle.json";
 import { getTokenAllowance } from "@/utils/transactions";

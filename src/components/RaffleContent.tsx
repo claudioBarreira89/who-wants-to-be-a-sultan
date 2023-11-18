@@ -102,7 +102,7 @@ const RaffleContent = () => {
               <Button className="w-full mb-2" onClick={onRaffleJoin}>
                 Buy raffle tickets
               </Button>
-              <p className="text-xs p-0 max-w-[518px]">
+              <p className="text-xs p-0 max-w-[518px] mt-2">
                 Thank You for you generosity. By purchasing this ticket you are
                 directly supporting UNICEF&apos;s fight on climate change.
               </p>

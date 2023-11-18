@@ -29,6 +29,7 @@ export const FormInput = <TFieldValues extends FieldValues = FieldValues>({
       {...props}
       initialValue={field.value}
       normalize={handleNormalize}
+      colon={false}
       validateStatus={fieldState.invalid ? 'error' : undefined}
       help={fieldState.error?.message ?? help}
     >
