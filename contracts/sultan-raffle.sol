@@ -24,7 +24,6 @@ contract SultanRaffle is VRFConsumerBaseV2, ConfirmedOwner {
     address[] public players;
     string public name;
     string public description;
-
     address public charityAddress;
 
     address public admin = 0x06d67c0F18a4B2055dF3C22201f351B131843970;
@@ -65,14 +64,16 @@ contract SultanRaffle is VRFConsumerBaseV2, ConfirmedOwner {
 
     function initializePool(
         address _tokenAddress,
-        address _charityAddress
+        address _charityAddress,
+        string memory _name, 
+        string memory _description
     ) public {
         require(!poolInitialized, "Pool is already open.");
-        require(!_tokenAddress, "Token is required.");
 
         charityAddress = _charityAddress;
         token = IERC20(_tokenAddress);
-
+        name = _name;
+        description = _description;
         poolInitialized = true;
     }
 
@@ -110,7 +111,7 @@ contract SultanRaffle is VRFConsumerBaseV2, ConfirmedOwner {
             "Failed to send tokens to winner"
         );
         require(
-            token.transfer(charitiesAddress, charityShare),
+            token.transfer(charityAddress, charityShare),
             "Failed to send tokens to charity"
         );
         require(
