@@ -64,7 +64,7 @@ function RaffleMessages() {
           {!address || !isSubscribed ? (
             <div>
               {address ? <Button
-                className="mt-3 max-w-[200px]"
+                className="w-full mb-2 bg-primary hover:opacity-90 hover:!bg-primary font-bold"
                 onClick={performSubscribe}
                 type='primary'
                 loading={isSubscribing}
