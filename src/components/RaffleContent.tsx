@@ -187,7 +187,11 @@ const RaffleContent = () => {
           <div className="flex flex-col w-full justify-center gap-4 mt-4">
             <div className="w-full">
               <Button
-                className="w-full mb-2"
+                style={{
+                  color: "white",
+                  border: "#ca912b",
+                }}
+                className="w-full mb-2 bg-primary hover:opacity-90 font-bold"
                 onClick={() => handleBet()}
                 loading={isBetting}
               >
