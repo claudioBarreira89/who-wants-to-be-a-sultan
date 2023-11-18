@@ -6,6 +6,8 @@ import { provider, signer } from "@/utils/transactions";
 type Data = {
   charityAddress: string;
   tokenAddress: string;
+  name: string;
+  description: string;
 };
 
 export default async function handler(
@@ -13,7 +15,7 @@ export default async function handler(
   res: NextApiResponse
 ) {
   try {
-    const { charityAddress, tokenAddress } = req.body;
+    const { charityAddress, tokenAddress, name, description } = req.body;
 
     const raffleContract = new Contract(
       process.env.NEXT_PUBLIC_SULTAN_RAFFLE_CONTRACT_ADDRESS!,

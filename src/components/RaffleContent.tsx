@@ -1,6 +1,7 @@
 import { Button, Input } from "antd";
 import Image from "next/image";
 import { useState } from "react";
+import NoActiveRaffleForm from "./NoActiveRaffleForm";
 
 const raffleData = [
   {
@@ -57,11 +58,8 @@ const RaffleContent = () => {
 
   return (
     <>
-      <div className="flex justify-center items-center flex-col gap-4 rounded-3xl p-8 bg-cardBg">
-        <div
-          className="relative rounded-full p-8 w-[300px] h-[300px] flex flex-col justify-center progress-bar"
-          style={progressBarStyle}
-        >
+      <div className="flex justify-center items-center flex-col gap-4 rounded-3xl p-8 bg-cardBg max-w-[550px]">
+        <div className="relative rounded-full p-8 w-[300px] h-[300px] flex flex-col justify-center progress-bar" style={progressBarStyle}>
           <div className="relative z-10 flex justify-center">
             <Image
               src="/gold_chest.svg"
@@ -78,7 +76,7 @@ const RaffleContent = () => {
 
         <div>
           <div className="flex flex-col justify-center gap-4 mt-4">
-            <div className="flex justify-center gap-2">
+            {/* <div className="flex justify-center gap-2">
               <Button
                 className="disabled:bg-gray-100"
                 onClick={handleDecrease}
@@ -97,10 +95,8 @@ const RaffleContent = () => {
                 onClick={handleIncrease}
                 disabled={number >= max}
                 className="disabled:bg-gray-100"
-              >
-                +
-              </Button>
-            </div>
+              >+</Button>
+            </div> */}
 
             <div className="w-full">
               <Button className="w-full mb-2" onClick={onRaffleJoin}>
@@ -118,15 +114,19 @@ const RaffleContent = () => {
           </div>
         </div>
       </div>
+
+      <div className="flex justify-center items-center flex-col gap-4 rounded-3xl mt-8 p-8 bg-cardBg w-[550px]">
+        <NoActiveRaffleForm />
+      </div>
+
       <div className="px-8 mb-8">
         <div className="flex items-center p-8 rounded-3xl bg-cardBg w-full mt-8">
           {raffleData.map((raffle, index) => (
             <div
               key={index}
-              className={`pl-8 ${
-                index == raffleData.length - 1 ||
+              className={`pl-8 ${index == raffleData.length - 1 ||
                 "border-0 border-r border-white pr-8"
-              }`}
+                }`}
             >
               <p className="text-sm text-slate-300">{raffle.title}</p>
               <p className="text-2xl">{raffle.showcase}</p>
