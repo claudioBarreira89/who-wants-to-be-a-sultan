@@ -9,15 +9,15 @@ function useSendNotification() {
   const { account } = useW3iAccount();
 
   const handleSendNotification = useCallback(
-    async (notification: INotification) => {
+    async (notification: INotification, accounts?: string[]) => {
       if (!account) {
         return;
       }
-
+      console.log(accounts);
       setIsSending(true);
       try {
         const { success, message } = await sendNotification({
-          accounts: [account],
+          accounts: accounts || [account],
           notification,
         });
 

@@ -1,6 +1,6 @@
 import { Button } from "antd";
 import Image from "next/image";
-import { useEffect, useMemo } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import NoActiveRaffleForm from "./NoActiveRaffleForm";
 import { Contract, utils } from "ethers";
 import sultanRaffleAbi from "../abi/sultan-raffle.json";
@@ -12,6 +12,7 @@ import RaffleMessages from "./RaffleMessages";
 import Spinner from "./Spinner";
 import useSendNotification from "@/utils/useSendNotification";
 import { useManageSubscription } from "@web3inbox/widget-react";
+import { getAllSubscribers } from "@/utils/fetchNotify";
 
 const poolSize = 1 * 10 ** 18;
 
@@ -20,7 +21,21 @@ const TOKEN_ADDRESS = "0x779877A7B0D9E8603169DdbD7836e478b4624789";
 const RaffleContent = () => {
   const { address } = useAccount();
   const { handleSendNotification } = useSendNotification();
-  const { isSubscribed } = useManageSubscription();
+  const { isSubscribed } = useManageSubscription()
+  const [subscribers, setSubscribers] = useState<string[]>();
+
+  const getSubscribers = useCallback(async () => {
+    try {
+      const allSubscribers = await getAllSubscribers();
+      setSubscribers(allSubscribers);
+    } catch (getSubscribersError) {
+      console.log({ getSubscribersError });
+    }
+  }, []);
+
+  useEffect(() => {
+    getSubscribers();
+  }, [getSubscribers]);
 
   const {
     data,
@@ -140,7 +155,7 @@ const RaffleContent = () => {
             icon: window.location.origin,
             url: window.location.origin,
             type: "aa613359-dc43-4a3c-8753-14349ced4a32",
-          });
+          }, subscribers);
         }
         console.log("bet placed");
 
