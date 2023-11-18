@@ -42,7 +42,7 @@ contract SultanRaffle is VRFConsumerBaseV2, ConfirmedOwner {
     uint256 public lastRequestId;
 
     uint256 public rafflesCounter;
-    uint256[] public totalRaffledAmount;
+    uint256[] public raffleWinnings;
 
     constructor(
         uint64 _subscriptionId
@@ -109,7 +109,7 @@ contract SultanRaffle is VRFConsumerBaseV2, ConfirmedOwner {
         uint256 charityShare = (poolBalance * 5) / 100;
 
         rafflesCounter += 1;
-        totalRaffledAmount.push(winnerShare);
+        raffleWinnings.push(winnerShare);
 
         require(
             token.transfer(winner, winnerShare),
@@ -168,8 +168,20 @@ contract SultanRaffle is VRFConsumerBaseV2, ConfirmedOwner {
     function getRaffleMetadata()
         public
         view
-        returns (string memory, string memory)
+        returns (
+            string memory,
+            string memory,
+            uint256,
+            uint256[] memory,
+            uint256
+        )
     {
-        return (name, description);
+        return (
+            name,
+            description,
+            players.length,
+            raffleWinnings,
+            rafflesCounter
+        );
     }
 }
