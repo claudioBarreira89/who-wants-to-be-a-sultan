@@ -56,6 +56,7 @@ export default function App({ Component, pageProps }: AppProps) {
       {ready ? (
         <QueryClientProvider client={queryClient}>
           <WagmiConfig config={wagmiConfig}>
+            <link rel="icon" href="/sultan.svg" sizes="any" />
             <Component {...pageProps} />
             <ToastContainer />
           </WagmiConfig>

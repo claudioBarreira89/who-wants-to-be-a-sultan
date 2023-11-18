@@ -392,3 +392,24 @@ Ensure the default browser behavior of the `hidden` attribute.
 [hidden] {
   display: none;
 }
+
+/* Custom Styles */
+.progress-bar {
+  --progress: 40%;
+  background: conic-gradient(
+    green var(--progress), 
+    red 0
+  );
+}
+
+.progress-bar::before {
+  content: '';
+  position: absolute;
+  background-color: #213743;
+  height: calc(100% - 5px);
+  width: calc(100% - 5px);
+  top: 2.5px;
+  left: 2.5px;
+  padding: 0;
+  border-radius: 100%;
+}

@@ -15,6 +15,7 @@ const config: Config = {
       },
       colors: {
         background: "#1a2c38",
+        cardBg: "#213743",
         primary: "#ca912b",
         secondary: "#032a48"
       },
