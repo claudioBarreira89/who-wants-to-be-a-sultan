@@ -10,6 +10,7 @@ import { AiOutlineClose } from 'react-icons/ai';
 import { toast } from 'react-toastify';
 import { useCallback, useEffect } from 'react'
 import { useSignMessage, useAccount } from 'wagmi'
+import useSendNotification from '@/utils/useSendNotification';
 
 const projectId = process.env.NEXT_PUBLIC_PROJECT_ID as string;
 const appDomain = process.env.NEXT_PUBLIC_APP_DOMAIN as string;
@@ -51,6 +52,22 @@ function RaffleMessages() {
     await subscribe()
   }, [subscribe, isRegistered])
 
+  const { handleSendNotification, isSending } = useSendNotification();
+
+  // handleSendNotification will send a notification to the current user and includes error handling.
+  // If you don't want to use this hook and want more flexibility, you can use sendNotification.
+  const handleTestNotification = useCallback(async () => {
+    if (isSubscribed) {
+      handleSendNotification({
+        title: "GM Hacker",
+        body: "Hack it until you make it!",
+        icon: `${window.location.origin}/notification.png`,
+        url: window.location.origin,
+        // ID retrieved from explorer api - Copy your notification type from WalletConnect Cloud and replace the default value below
+        type: "5472094a-3ac1-4483-a861-26aef4ca05ae",
+      });
+    }
+  }, [handleSendNotification, isSubscribed]);
   // const { subscription } = useSubscription()
   // sendMessage(`The event has been called in a smart contract ${address}`, eventName)
 
@@ -108,7 +125,13 @@ function RaffleMessages() {
                       </div>
                     ))
                 )}
-
+                <Button
+                  type="primary"
+                  onClick={handleTestNotification}
+                  loading={isSending}
+                >
+                  Send test notification
+                </Button>
                 <Button
                   onClick={unsubscribe}
                   type="primary"
