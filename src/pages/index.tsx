@@ -23,6 +23,8 @@ export default function Home() {
       const response = await axios.post("/api/initPool", {
         tokenAddress: "0x779877A7B0D9E8603169DdbD7836e478b4624789",
         charityAddress: "0x06d67c0F18a4B2055dF3C22201f351B131843970",
+        name: "Charity pool",
+        description: "Funds to help climate change",
       });
       return response;
     },

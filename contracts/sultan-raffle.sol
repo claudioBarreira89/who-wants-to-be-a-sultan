@@ -9,6 +9,7 @@ import "@chainlink/contracts/src/v0.8/shared/access/ConfirmedOwner.sol";
 contract SultanRaffle is VRFConsumerBaseV2, ConfirmedOwner {
     event RequestSent(uint256 requestId, uint32 numWords);
     event RequestFulfilled(uint256 requestId, uint256[] randomWords);
+    event RaffleWinner(uint256 winnerIndex, address winner);
 
     struct RequestStatus {
         bool fulfilled;
@@ -94,16 +95,14 @@ contract SultanRaffle is VRFConsumerBaseV2, ConfirmedOwner {
 
         if (poolBalance >= poolCap) {
             requestRandomWords();
-            resetPool();
         }
     }
 
     function closePool() public isPoolOpen {
         requestRandomWords();
-        resetPool();
     }
 
-    function transferFundsToWinner(address winner) private {
+    function transferFundsToWinner(address winner) public {
         uint256 poolBalance = token.balanceOf(address(this));
         uint256 winnerShare = (poolBalance * 95) / 100;
         uint256 charityShare = (poolBalance * 5) / 100;
@@ -119,6 +118,8 @@ contract SultanRaffle is VRFConsumerBaseV2, ConfirmedOwner {
             token.transfer(charityAddress, charityShare),
             "Failed to send tokens to charity"
         );
+
+        resetPool();
     }
 
     function resetPool() public {
@@ -126,7 +127,7 @@ contract SultanRaffle is VRFConsumerBaseV2, ConfirmedOwner {
         delete players;
     }
 
-    function requestRandomWords() public onlyOwner returns (uint256 requestId) {
+    function requestRandomWords() internal returns (uint256 requestId) {
         requestId = COORDINATOR.requestRandomWords(
             keyHash,
             s_subscriptionId,
@@ -149,16 +150,20 @@ contract SultanRaffle is VRFConsumerBaseV2, ConfirmedOwner {
         uint256 _requestId,
         uint256[] memory _randomWords
     ) internal override {
+        emit RequestFulfilled(_requestId, _randomWords);
+
         require(s_requests[_requestId].exists, "request not found");
         s_requests[_requestId].fulfilled = true;
         s_requests[_requestId].randomWords = _randomWords;
 
-        uint256 winnerIndex = _randomWords[0] % players.length;
-        address winner = players[winnerIndex];
+        if (players.length > 0) {
+            uint256 winnerIndex = _randomWords[0] % players.length;
+            address winner = players[winnerIndex];
 
-        transferFundsToWinner(winner);
+            transferFundsToWinner(winner);
 
-        emit RequestFulfilled(_requestId, _randomWords);
+            emit RaffleWinner(winnerIndex, winner);
+        }
     }
 
     receive() external payable {

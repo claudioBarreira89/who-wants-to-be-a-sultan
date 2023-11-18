@@ -13,7 +13,7 @@ export default async function handler(
   res: NextApiResponse
 ) {
   try {
-    const { charityAddress, tokenAddress } = req.body;
+    const { charityAddress, tokenAddress, name, description } = req.body;
 
     const raffleContract = new Contract(
       process.env.NEXT_PUBLIC_SULTAN_RAFFLE_CONTRACT_ADDRESS!,
@@ -23,7 +23,9 @@ export default async function handler(
 
     const tx = await raffleContract.initializePool(
       tokenAddress,
-      charityAddress
+      charityAddress,
+      name,
+      description
     );
 
     console.log({ tx });

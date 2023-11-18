@@ -70,6 +70,25 @@
       {
         "indexed": false,
         "internalType": "uint256",
+        "name": "winnerIndex",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "winner",
+        "type": "address"
+      }
+    ],
+    "name": "RaffleWinner",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
         "name": "requestId",
         "type": "uint256"
       },
@@ -398,19 +417,6 @@
   },
   {
     "inputs": [],
-    "name": "requestRandomWords",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "requestId",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
     "name": "resetPool",
     "outputs": [],
     "stateMutability": "nonpayable",
@@ -451,6 +457,19 @@
       }
     ],
     "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "winner",
+        "type": "address"
+      }
+    ],
+    "name": "transferFundsToWinner",
+    "outputs": [],
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
