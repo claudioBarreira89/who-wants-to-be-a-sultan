@@ -23,10 +23,8 @@ contract SultanRaffle is VRFConsumerBaseV2, ConfirmedOwner {
     uint256 public betAmount;
     address[] public players;
 
-    address[] public charities = [
-        0x06d67c0F18a4B2055dF3C22201f351B131843970,
-        0x06d67c0F18a4B2055dF3C22201f351B131843970
-    ];
+    address public charityAddress;
+
     address public admin = 0x06d67c0F18a4B2055dF3C22201f351B131843970;
 
     mapping(uint256 => RequestStatus) public s_requests;
@@ -43,7 +41,6 @@ contract SultanRaffle is VRFConsumerBaseV2, ConfirmedOwner {
     uint256 public lastRequestId;
 
     constructor(
-        address _tokenAddress,
         uint64 _subscriptionId
     )
         VRFConsumerBaseV2(0x8103B0A8A00be2DDC778e6e7eaa21791Cd364625)
@@ -53,8 +50,6 @@ contract SultanRaffle is VRFConsumerBaseV2, ConfirmedOwner {
             0x8103B0A8A00be2DDC778e6e7eaa21791Cd364625
         );
         s_subscriptionId = _subscriptionId;
-
-        token = IERC20(_tokenAddress);
 
         betAmount = 0.1 * (10 ** 18);
         poolCap = 1 * (10 ** 18);
@@ -66,8 +61,16 @@ contract SultanRaffle is VRFConsumerBaseV2, ConfirmedOwner {
         _;
     }
 
-    function initializePool() public {
+    function initializePool(
+        address _tokenAddress,
+        address _charityAddress
+    ) public {
         require(!poolInitialized, "Pool is already open.");
+        require(!_tokenAddress, "Token is required.");
+
+        charityAddress = _charityAddress;
+        token = IERC20(_tokenAddress);
+
         poolInitialized = true;
     }
 
@@ -105,7 +108,7 @@ contract SultanRaffle is VRFConsumerBaseV2, ConfirmedOwner {
             "Failed to send tokens to winner"
         );
         require(
-            token.transfer(charities[0], charityShare),
+            token.transfer(charitiesAddress, charityShare),
             "Failed to send tokens to charity"
         );
         require(
@@ -119,11 +122,7 @@ contract SultanRaffle is VRFConsumerBaseV2, ConfirmedOwner {
         delete players;
     }
 
-    function requestRandomWords()
-        private
-        onlyOwner
-        returns (uint256 requestId)
-    {
+    function requestRandomWords() public onlyOwner returns (uint256 requestId) {
         requestId = COORDINATOR.requestRandomWords(
             keyHash,
             s_subscriptionId,

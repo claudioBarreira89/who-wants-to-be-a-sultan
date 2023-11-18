@@ -21,7 +21,10 @@ export default async function handler(
       signer
     );
 
-    const tx = await raffleContract.initializePool();
+    const tx = await raffleContract.initializePool(
+      tokenAddress,
+      charityAddress
+    );
 
     console.log({ tx });
 
