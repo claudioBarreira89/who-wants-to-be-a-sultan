@@ -1,9 +1,8 @@
-import Head from 'next/head';
+import Head from "next/head";
 import LandingContent from "../components/LandingContent";
 import Layout from "../components/Layout";
 
 export default function Home() {
-
   return (
     <>
       <Head>
@@ -13,7 +12,16 @@ export default function Home() {
       </Head>
       <Layout>
         <LandingContent />
-      </Layout >
+      </Layout>
+
+      <div className="m-2 p-2 border fixed bottom-0 rounded-md">
+        <div className="mb-1">Admin</div>
+        <div className="flex gap-2">
+          <button className="p-1 px-2 bg-primary rounded-md">Init pool</button>
+          <button className="p-1 px-2 bg-primary rounded-md">Add funds</button>
+          <button className="p-1 px-2 bg-primary rounded-md">Close pool</button>
+        </div>
+      </div>
     </>
   );
 }
