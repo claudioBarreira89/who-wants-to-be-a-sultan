@@ -20,7 +20,7 @@ const TOKEN_ADDRESS = "0x779877A7B0D9E8603169DdbD7836e478b4624789";
 const RaffleContent = () => {
   const { address } = useAccount();
   const { handleSendNotification } = useSendNotification();
-  const { isSubscribed } = useManageSubscription()
+  const { isSubscribed } = useManageSubscription();
 
   const {
     data,
@@ -229,7 +229,7 @@ const RaffleContent = () => {
       </div>
 
       <div className="flex-[2] pr-[10px]">
-        <div className="flex items-start p-8 rounded-3xl bg-cardBg w-full min-h-full overflow-auto">
+        <div className="flex items-start py-8 px-4 rounded-3xl bg-cardBg w-full min-h-full overflow-auto">
           <RaffleMessages />
         </div>
       </div>
