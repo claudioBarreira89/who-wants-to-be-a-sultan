@@ -71,7 +71,7 @@ const RaffleContent = () => {
     () => [
       {
         title: "Total Winnings",
-        showcase: `${winnings} ${data?.tokenSymbol}`,
+        showcase: `${winnings.toFixed(2)} ${data?.tokenSymbol}`,
       },
       {
         title: "Num. of bets",
@@ -87,9 +87,9 @@ const RaffleContent = () => {
       },
       {
         title: "Average winnings",
-        showcase: `${winnings / (parseInt(data?.raffleCounter) || 1)} ${
-          data?.tokenSymbol
-        }`,
+        showcase: `${(winnings / (parseInt(data?.raffleCounter) || 1)).toFixed(
+          2
+        )} ${data?.tokenSymbol}`,
       },
     ],
     [data?.players, data?.raffleCounter, data?.tokenSymbol, winnings]
