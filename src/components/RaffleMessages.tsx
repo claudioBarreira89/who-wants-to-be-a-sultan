@@ -59,12 +59,12 @@ function RaffleMessages() {
   const handleTestNotification = useCallback(async () => {
     if (isSubscribed) {
       handleSendNotification({
-        title: "GM Hacker",
-        body: "Hack it until you make it!",
-        icon: `${window.location.origin}/notification.png`,
+        title: "Test Notification",
+        body: "Notification generated in app",
+        icon: window.location.origin,
         url: window.location.origin,
         // ID retrieved from explorer api - Copy your notification type from WalletConnect Cloud and replace the default value below
-        type: "5472094a-3ac1-4483-a861-26aef4ca05ae",
+        type: "aa613359-dc43-4a3c-8753-14349ced4a32",
       });
     }
   }, [handleSendNotification, isSubscribed]);
@@ -72,7 +72,7 @@ function RaffleMessages() {
   // sendMessage(`The event has been called in a smart contract ${address}`, eventName)
 
   return (
-    <div className='h-full w-full relative'>
+    <div className='h-[440px] relative'>
       <h2 className="mb-6 text-xl">Last Messages</h2>
       {!isReady ? (
         <div>Loading client...</div>
@@ -125,27 +125,31 @@ function RaffleMessages() {
                       </div>
                     ))
                 )}
-                <Button
-                  type="primary"
-                  onClick={handleTestNotification}
-                  loading={isSending}
-                >
-                  Send test notification
-                </Button>
-                <Button
-                  onClick={unsubscribe}
-                  type="primary"
-                  className="bg-red-500 hover:!bg-red-400 absolute bottom-0 left-0 right-0"
-                  disabled={!isReady || !account}
-                  loading={isSubscribing}
-                >
-                  Unsubscribe from events
-                </Button>
               </div>
             </div>
           )}
         </>
       )}
+
+      <div className='fixed bottom-1 right-2 flex flex-col gap-1'>
+        <Button
+          onClick={unsubscribe}
+          type="primary"
+          className="bg-red-500 hover:!bg-red-400"
+          disabled={!isReady || !account}
+          loading={isSubscribing}
+        >
+          Unsubscribe from events
+        </Button>
+        <Button
+          className='my-4'
+          type="primary"
+          onClick={handleTestNotification}
+          loading={isSending}
+        >
+          Send test notification
+        </Button>
+      </div>
     </div>
   );
 }

@@ -10,6 +10,8 @@ import { useQuery, useMutation } from "@tanstack/react-query";
 import { readContract, waitForTransaction, writeContract } from "wagmi/actions";
 import RaffleMessages from "./RaffleMessages";
 import Spinner from "./Spinner";
+import useSendNotification from "@/utils/useSendNotification";
+import { useManageSubscription } from "@web3inbox/widget-react";
 
 const poolSize = 1 * 10 ** 18;
 
@@ -17,6 +19,8 @@ const TOKEN_ADDRESS = "0x779877A7B0D9E8603169DdbD7836e478b4624789";
 
 const RaffleContent = () => {
   const { address } = useAccount();
+  const { handleSendNotification } = useSendNotification();
+  const { isSubscribed } = useManageSubscription()
 
   const {
     data,
@@ -129,6 +133,15 @@ const RaffleContent = () => {
 
         await waitForTransaction({ hash: betTx.hash });
 
+        if (isSubscribed) {
+          handleSendNotification({
+            title: "A new raffle entry",
+            body: "A new person has entered the raffle",
+            icon: window.location.origin,
+            url: window.location.origin,
+            type: "aa613359-dc43-4a3c-8753-14349ced4a32",
+          });
+        }
         console.log("bet placed");
 
         refetchRaffleInfo();
@@ -192,7 +205,7 @@ const RaffleContent = () => {
               </p>
             </div>
           </div>
-          <div className="w-full">
+          <div className="w-full h-full">
             <div className="flex flex-col justify-center gap-4 mt-4">
               <div className="w-full">
                 <Button

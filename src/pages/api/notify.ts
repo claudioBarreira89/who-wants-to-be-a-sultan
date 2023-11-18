@@ -30,7 +30,7 @@ export default async function handler(
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${notifyApiSecret}`,
+          Authorization: `Bearer 71e84139-0dd3-4fd3-92d3-23814ca8eeba`,
         },
         body: JSON.stringify(notificationPayload),
       }
