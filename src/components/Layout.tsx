@@ -1,9 +1,10 @@
 import React, { ReactNode, useMemo, useState } from "react";
-import { useNetwork } from "wagmi";
+import { useAccount, useNetwork } from "wagmi";
 import Image from "next/image";
 import Link from "next/link";
 
 const Layout = ({ children }: { children: ReactNode }) => {
+  const { address } = useAccount()
   const { chain } = useNetwork();
   const chainId = chain?.id || "";
   const [isNetworkSwitchHighlighted, setIsNetworkSwitchHighlighted] =
@@ -40,9 +41,8 @@ const Layout = ({ children }: { children: ReactNode }) => {
             <div className="flex items-center gap-2">
               <div
                 onClick={closeAll}
-                className={`relative ${
-                  isNetworkSwitchHighlighted ? "z-5" : ""
-                }`}
+                className={`relative ${isNetworkSwitchHighlighted ? "z-5" : ""
+                  }`}
               >
                 <w3m-network-button />
               </div>
@@ -56,7 +56,17 @@ const Layout = ({ children }: { children: ReactNode }) => {
           </div>
         </div>
       </header>
-      <main className="grid place-items-center h-full">{children}</main>
+      {address ?
+        <main className="grid place-items-center h-full">
+          <div className="max-w-[850px]">
+            {children}
+          </div>
+        </main> :
+        <main className="grid place-items-center h-full">
+          <div className="flex justify-center items-center flex-col gap-4 rounded-3xl mt-8 p-8 bg-cardBg w-[550px]">
+            <h2>Please log-in with your wallet to use the app</h2>
+          </div>
+        </main>}
     </>
   );
 };

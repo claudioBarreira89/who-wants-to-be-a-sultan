@@ -25,6 +25,23 @@ body {
   background: rgb(var(--background-rgb));
 }
 
+::-webkit-scrollbar {
+    width: 8px;
+}
+ 
+/* Track */
+::-webkit-scrollbar-track {
+    background: transparent;
+    border-radius: 5px;
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #d1d1d1;
+    border-radius: 5px;
+}
+ 
+
 /* Default Tailwind styles */
 /*
 1. Prevent padding and border from affecting element width. (https://github.com/mozdevs/cssremedy/issues/4)
