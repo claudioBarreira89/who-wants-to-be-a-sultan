@@ -7,7 +7,7 @@ import sultanRaffleAbi from "../abi/sultan-raffle.json";
 import { getTokenAllowance, provider } from "@/utils/transactions";
 import { erc20ABI, useAccount, useContractWrite } from "wagmi";
 import { useQuery, useMutation } from "@tanstack/react-query";
-import { waitForTransaction, writeContract } from "wagmi/actions";
+import { readContract, waitForTransaction, writeContract } from "wagmi/actions";
 
 const raffleData = [
   {
@@ -35,39 +35,21 @@ const TOKEN_ADDRESS = "0x779877A7B0D9E8603169DdbD7836e478b4624789";
 const RaffleContent = () => {
   const { address } = useAccount();
 
-  const [number, setNumber] = useState(0);
-  const min = 1;
-  const max = 3;
-  let progress = 30;
-
-  const handleDecrease = () => {
-    const newNumber = number - 1;
-    if (newNumber < min || newNumber > max) return;
-    setNumber((prevNumber) => prevNumber - 1);
-  };
-
-  const handleIncrease = () => {
-    const newNumber = number + 1;
-    if (newNumber < min || newNumber > max) return;
-    setNumber((prevNumber) => prevNumber + 1);
-  };
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = parseInt(e.target.value, 10);
-    if (!isNaN(value) && value >= min && value <= max) {
-      console.log("sejhfbsej");
-      setNumber(value);
-    }
-  };
-
-  const onRaffleJoin = () => {
-    console.log("you joined the raffle");
-  };
-
-  const { data, refetch: refetchRaffleInfo } = useQuery({
+  const {
+    data,
+    refetch: refetchRaffleInfo,
+    isLoading,
+  } = useQuery({
     queryKey: ["raffleInfo"],
     queryFn: async () => {
       const tokenContract = new Contract(TOKEN_ADDRESS, erc20ABI, provider);
+
+      const isPoolInitialized = await readContract({
+        address: process.env
+          .NEXT_PUBLIC_SULTAN_RAFFLE_CONTRACT_ADDRESS! as `0x${string}`,
+        functionName: "poolInitialized",
+        abi: sultanRaffleAbi,
+      });
 
       const balance = await tokenContract.balanceOf(
         process.env.NEXT_PUBLIC_SULTAN_RAFFLE_CONTRACT_ADDRESS!
@@ -77,6 +59,7 @@ const RaffleContent = () => {
       const tokenSymbol = await tokenContract.symbol();
 
       return {
+        isPoolInitialized,
         balance: +balance,
         poolAmount,
         tokenSymbol,
@@ -132,6 +115,18 @@ const RaffleContent = () => {
     "--progress": `${((data?.balance || 0) / poolSize) * 100}%`,
   } as React.CSSProperties;
 
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (!data?.isPoolInitialized) {
+    return (
+      <div className="flex justify-center items-center flex-col gap-4 rounded-3xl mt-8 p-8 bg-cardBg w-[550px]">
+        <NoActiveRaffleForm />
+      </div>
+    );
+  }
+
   return (
     <>
       <div className="flex justify-center items-center flex-col gap-4 rounded-3xl p-8 bg-cardBg max-w-[550px]">
@@ -172,10 +167,6 @@ const RaffleContent = () => {
             </div>
           </div>
         </div>
-      </div>
-
-      <div className="flex justify-center items-center flex-col gap-4 rounded-3xl mt-8 p-8 bg-cardBg w-[550px]">
-        <NoActiveRaffleForm />
       </div>
 
       <div className="px-8 mb-8">

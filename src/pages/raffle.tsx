@@ -1,7 +1,8 @@
-import React from 'react';
-import Layout from '../components/Layout';
-import Head from 'next/head';
-import RaffleContent from '@/components/RaffleContent';
+import React from "react";
+import Layout from "../components/Layout";
+import Head from "next/head";
+import RaffleContent from "@/components/RaffleContent";
+import AdminPanel from "@/components/AdminPanel";
 
 const raffle = () => {
   return (
@@ -14,8 +15,10 @@ const raffle = () => {
       <Layout>
         <RaffleContent />
       </Layout>
-    </>
-  )
-}
 
-export default raffle
+      <AdminPanel />
+    </>
+  );
+};
+
+export default raffle;
