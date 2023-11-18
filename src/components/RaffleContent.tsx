@@ -8,6 +8,7 @@ import { getTokenAllowance, provider } from "@/utils/transactions";
 import { erc20ABI, useAccount, useContractWrite } from "wagmi";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { readContract, waitForTransaction, writeContract } from "wagmi/actions";
+import Spinner from "./Spinner";
 
 const poolSize = 1 * 10 ** 18;
 
@@ -148,7 +149,11 @@ const RaffleContent = () => {
   } as React.CSSProperties;
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="mt-20">
+        <Spinner />
+      </div>
+    );
   }
 
   if (!data?.isPoolInitialized) {
