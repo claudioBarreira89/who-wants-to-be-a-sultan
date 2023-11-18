@@ -13,6 +13,8 @@
     "@openzeppelin/contracts": "^5.0.0",
     "@web3modal/wagmi": "^3.3.2",
     "antd": "^5.11.2",
+    "axios": "^1.6.2",
+    "ethers": "5.7.2",
     "next": "14.0.3",
     "openai": "^4.19.0",
     "react": "^18",

@@ -1,8 +1,24 @@
 import Head from "next/head";
 import LandingContent from "../components/LandingContent";
 import Layout from "../components/Layout";
+import { useMutation } from "@tanstack/react-query";
+import axios from "axios";
 
 export default function Home() {
+  const { mutate: initPool } = useMutation({
+    mutationFn: async () => {
+      const data = await axios.post("/api/initPool");
+      return data;
+    },
+  });
+
+  const { mutate: closePool } = useMutation({
+    mutationFn: async () => {
+      const data = await axios.post("/api/closePool");
+      return data;
+    },
+  });
+
   return (
     <>
       <Head>
@@ -17,9 +33,19 @@ export default function Home() {
       <div className="m-2 p-2 border fixed bottom-0 rounded-md">
         <div className="mb-1">Admin</div>
         <div className="flex gap-2">
-          <button className="p-1 px-2 bg-primary rounded-md">Init pool</button>
+          <button
+            className="p-1 px-2 bg-primary rounded-md"
+            onClick={() => initPool()}
+          >
+            Init pool
+          </button>
           <button className="p-1 px-2 bg-primary rounded-md">Add funds</button>
-          <button className="p-1 px-2 bg-primary rounded-md">Close pool</button>
+          <button
+            className="p-1 px-2 bg-primary rounded-md"
+            onClick={() => closePool()}
+          >
+            Close pool
+          </button>
         </div>
       </div>
     </>
