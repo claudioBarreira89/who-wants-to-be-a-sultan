@@ -6,6 +6,8 @@ import { provider, signer } from "@/utils/transactions";
 type Data = {
   charityAddress: string;
   tokenAddress: string;
+  name: string;
+  description: string;
 };
 
 export default async function handler(
