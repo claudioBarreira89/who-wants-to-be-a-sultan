@@ -4,6 +4,7 @@ import { FormInput } from "./FormInput";
 import axios from "axios";
 import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
+import { toast } from "react-toastify";
 
 interface ContractFormProps {
 
@@ -52,9 +53,15 @@ const NoActiveRaffleForm = () => {
   })
   const { mutate: initPool, isLoading } = useMutation({
     mutationFn: async (args: CreateData) => {
-      const data = await axios.post("/api/initPool", { ...args });
-      console.log(data);
-      return data;
+      try {
+        const data = await axios.post("/api/initPool", { ...args });
+        console.log(data);
+        toast.success("New raffle created!")
+        return data;
+      } catch (error) {
+        console.log(error);
+        toast.error("Something went wrong creating a raffle.")
+      }
     },
   });
 
@@ -158,7 +165,9 @@ const NoActiveRaffleForm = () => {
         </div>
         <div className="flex mt-4 w-full">
           <Form.Item className="mb-[5px] w-full">
-            <Button loading={isLoading} htmlType='submit' className="h-9 w-full">Create a new raffle</Button>
+            <Button loading={isLoading} htmlType='submit' className="h-9 w-full">
+              {isLoading ? "Creating a new raffle.." : "Create a new raffle"}
+            </Button>
           </Form.Item>
         </div>
       </form>
