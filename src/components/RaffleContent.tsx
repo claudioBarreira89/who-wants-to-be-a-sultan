@@ -133,6 +133,16 @@ const RaffleContent = () => {
     },
   });
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      refetchRaffleInfo();
+    }, 5000);
+
+    return () => {
+      clearInterval(interval);
+    };
+  }, [refetchRaffleInfo]);
+
   const progressBarStyle = {
     "--progress": `${((data?.balance || 0) / poolSize) * 100}%`,
   } as React.CSSProperties;
