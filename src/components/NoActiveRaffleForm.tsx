@@ -70,7 +70,6 @@ const NoActiveRaffleForm = () => {
     }
   };
 
-  console.log(isLoading);
   return (
     <div className='w-full' >
       <h2 className="mb-2 text-2xl text-center">Set up new raffle</h2>

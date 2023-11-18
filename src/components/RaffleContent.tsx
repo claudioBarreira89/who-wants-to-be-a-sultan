@@ -1,6 +1,5 @@
-import { Button, Input } from "antd";
+import { Button } from "antd";
 import Image from "next/image";
-import { useState } from "react";
 import NoActiveRaffleForm from "./NoActiveRaffleForm";
 
 const raffleData = [
@@ -23,30 +22,7 @@ const raffleData = [
 ];
 
 const RaffleContent = () => {
-  const [number, setNumber] = useState(0);
-  const min = 1;
-  const max = 3;
   let progress = 30;
-
-  const handleDecrease = () => {
-    const newNumber = number - 1;
-    if (newNumber < min || newNumber > max) return;
-    setNumber((prevNumber) => prevNumber - 1);
-  };
-
-  const handleIncrease = () => {
-    const newNumber = number + 1;
-    if (newNumber < min || newNumber > max) return;
-    setNumber((prevNumber) => prevNumber + 1);
-  };
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = parseInt(e.target.value, 10);
-    if (!isNaN(value) && value >= min && value <= max) {
-      console.log("sejhfbsej");
-      setNumber(value);
-    }
-  };
 
   const progressBarStyle = {
     "--progress": `${progress}%`,
@@ -76,28 +52,6 @@ const RaffleContent = () => {
 
         <div>
           <div className="flex flex-col justify-center gap-4 mt-4">
-            {/* <div className="flex justify-center gap-2">
-              <Button
-                className="disabled:bg-gray-100"
-                onClick={handleDecrease}
-                disabled={number <= min}
-              >
-                -
-              </Button>
-              <Input
-                min={min}
-                max={max}
-                className="w-8"
-                value={number}
-                onChange={handleChange}
-              />
-              <Button
-                onClick={handleIncrease}
-                disabled={number >= max}
-                className="disabled:bg-gray-100"
-              >+</Button>
-            </div> */}
-
             <div className="w-full">
               <Button className="w-full mb-2" onClick={onRaffleJoin}>
                 Buy raffle tickets
