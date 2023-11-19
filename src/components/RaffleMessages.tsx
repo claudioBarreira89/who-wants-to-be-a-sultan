@@ -148,14 +148,14 @@ function RaffleMessages({ subscribers }: { subscribers?: string[] }) {
           >
             Unsubscribe from events
           </Button>
-          <Button
+          {/* <Button
             className="my-4"
             type="primary"
             onClick={handleTestNotification}
             loading={isSending}
           >
             Send test notification
-          </Button>
+          </Button> */}
         </div>
       </div>
       <ChatForm isSubscribed={isSubscribed} subscribers={subscribers} />

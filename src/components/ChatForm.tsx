@@ -10,11 +10,12 @@ type Inputs = {
 
 const ChatForm = ({ isSubscribed, subscribers }: { isSubscribed: boolean, subscribers?: string[] }) => {
   const { address } = useAccount();
-  const { handleSubmit, control, setValue, formState: { isSubmitting } } = useForm<Inputs>({
+  const { handleSubmit, control, setValue, watch, formState: { isSubmitting } } = useForm<Inputs>({
     defaultValues: {
       text: "",
     },
   });
+  const textValue = watch("text");
 
   function shortenAddress(address: string) {
     if (!address || address.length < 9) {
@@ -48,6 +49,7 @@ const ChatForm = ({ isSubscribed, subscribers }: { isSubscribed: boolean, subscr
             <Input
               disabled={isSubmitting}
               className="w-full m-0"
+              value={textValue}
               placeholder="Type something cool"
               required
               onChange={(e) => setValue("text", e.target.value)}
