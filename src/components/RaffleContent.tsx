@@ -244,8 +244,9 @@ const RaffleContent = () => {
       </div>
 
       <div className="flex-[2] pr-[10px]">
-        <div className="flex items-start py-8 px-4 rounded-3xl bg-cardBg w-full min-h-full overflow-auto">
-          <RaffleMessages />
+        <div className="flex flex-col items-between justify-between py-8 px-4 rounded-3xl bg-cardBg w-full min-h-full">
+          <h2 className="text-xl">Last Messages</h2>
+          <RaffleMessages subscribers={subscribers} />
         </div>
       </div>
 

@@ -5,7 +5,7 @@ import axios from "axios";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 
-interface ContractFormProps {}
+interface ContractFormProps { }
 
 type Inputs = {
   name: string;
